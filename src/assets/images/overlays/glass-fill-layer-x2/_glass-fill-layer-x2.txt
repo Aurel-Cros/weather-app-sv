@@ -1,0 +1,7 @@
+glass fill layer flattened with edited overlays and dimensions for demo screen x2 
+no blur no shadow no border no border radius
+
+both 100 opacity and 50/70 opacity are included for the main glass div background since they have an independent opacity on top of the one shared with rest of the div content
+option screens background only comes in 100 opacity because the added opacity is applied to the whole group 
+
+rainy and stormy main go with hail-ui
