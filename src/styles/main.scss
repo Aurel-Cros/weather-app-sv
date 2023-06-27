@@ -6,6 +6,7 @@
     background-repeat: no-repeat;
 
     position: absolute;
+    opacity: 0.7;
 }
 
 $main-text: rgba(255, 255, 255, 0.7);
@@ -35,10 +36,14 @@ body {
 }
 
 #root {
-    width: 100%;
+    width: 360px;
     height: 100vh;
-    margin: 0;
+    margin: 0 auto;
+    padding: 3.1rem 2.5rem 1rem;
     box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: start;
 
     &.p-sunny {
         background-image: url('/src/assets/images/bg/p-sunny-3.jpg');
@@ -54,11 +59,11 @@ main {
     border-radius: 40px;
     border: 0.5px solid rgba(136, 178, 201, 0.7);
     margin: 0 auto 0;
-    padding: 1rem;
+    padding: 2rem 0 1rem;
 }
 
 .p-sunny-fill {
-    background: url('/src/assets/images/overlays/glass-fill-layer-x2/p-sunny-main-50.png');
+    background: url('/src/assets/images/overlays/glass-fill-layer-x2/p-sunny-main-70.png');
 }
 
 .glass-shadow-blur {
@@ -92,7 +97,7 @@ main {
     font-family: Orbitron;
     font-weight: 700;
 
-    margin: 0.87rem auto 0;
+    margin: 0.87rem auto 2.5rem;
 
     >p:first-of-type {
         margin-bottom: 0;
@@ -122,11 +127,15 @@ main {
 }
 
 .weather-graph {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr 50% 1fr;
     grid-template-rows: 1.375rem auto 1.375rem;
     place-content: center;
 
+    p {
+        margin: 0;
+    }
 
     .temp-hi {
         position: relative;
@@ -162,6 +171,7 @@ main {
     }
 
     .weather-graph-values {
+        position: relative;
         aspect-ratio: 1/1;
         grid-row: 1/-1;
         grid-column: 2;
@@ -191,13 +201,14 @@ main {
 
     font-family: Sansation;
     font-size: 0.625rem;
+    text-indent: 1rem;
 
     &.wind::before {
         @include iconForText();
         background-image: url('../assets/icons/details-wind.svg');
         width: 0.75rem;
         height: 0.625rem;
-        left: -1rem;
+        left: 0rem;
         top: 0.1rem;
     }
 
@@ -206,7 +217,7 @@ main {
         background-image: url('../assets/icons/details-humidity.svg');
         width: 0.75rem;
         height: 0.625rem;
-        left: -1rem;
+        left: 0rem;
         top: 0.1rem;
     }
 }
@@ -223,21 +234,30 @@ main {
 
 .five-days-pred {
     display: flex;
-    margin: 0 1rem;
+    margin: 0 0.1rem;
 }
 
 .pred-card {
     margin: 0;
+    padding: 0 0.25rem;
+    width: 100%;
     display: flex;
     flex-flow: column nowrap;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+
+    img {
+        width: 1.75rem;
+        height: 1.75rem;
+        opacity: 0.7;
+    }
 
     p {
         text-align: center;
         font-size: 0.75rem;
         font-family: Sansation;
         margin: 0;
+        padding: 0;
 
         &:nth-of-type(2) {
             font-weight: 700;
@@ -245,14 +265,18 @@ main {
 
         &.humidity {
             position: relative;
+            font-size: 0.5rem;
+            text-indent: 0.5rem;
+            margin-top: 0.1rem;
 
             &::before {
                 @include iconForText();
                 background-image: url('../assets/icons/details-humidity.svg');
-                width: 0.75rem;
-                height: 0.625rem;
-                left: -1rem;
-                top: 0.1rem;
+                width: 0.42rem;
+                height: 0.63rem;
+                left: -0.15rem;
+                top: 0rem;
+                opacity: 0.7;
             }
         }
 
@@ -260,4 +284,48 @@ main {
             width: 1.75rem;
         }
     }
+
+    &:not(:first-child) {
+        border-left: 1px solid white;
+    }
+}
+
+.short-text {
+    position: relative;
+    text-align: center;
+    font-size: 0.75rem;
+    font-family: Sansation;
+    margin: 1.8rem 2.5rem;
+
+    button {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+
+
+        color: #FFF;
+        text-align: center;
+        font-size: 2.5rem;
+        font-family: Orbitron;
+        line-height: 0.5rem;
+    }
+}
+
+.randomize {
+    display: flex;
+    justify-content: center;
+    margin: 2.5rem auto 0.3rem;
+
+    button {
+        cursor: pointer;
+        background-image: url('../assets/icons/dice-random.svg');
+        width: 1.5rem;
+        height: 1.75rem;
+    }
+}
+
+button {
+    background: transparent;
+    border: none;
+    opacity: 0.8;
 }
