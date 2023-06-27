@@ -11,3 +11,6 @@ rotate += hour12 * 30;
 rotate += mins / 2;
 
 clock.style.rotate = `${rotate}deg`;
+setInterval(() => {
+    clock.style.rotate = `${rotate}deg`;
+}, 300000);
