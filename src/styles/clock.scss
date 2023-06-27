@@ -1,0 +1,22 @@
+.clock-leg {
+    position: absolute;
+    width: 49%;
+    top: 50%;
+    left: 0;
+    rotate: 90deg;
+    transform-origin: center right;
+    transition: all 1s linear;
+}
+
+.clock-ball {
+    position: absolute;
+    top: 0;
+    left: 0.5rem;
+    translate: 0 -50%;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.7;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+}
