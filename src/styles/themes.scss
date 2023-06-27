@@ -1,0 +1,225 @@
+#root {
+    &.sunny {
+        background-image: url('/src/assets/images/bg/sunny-1.jpg');
+
+        &.bg2 {
+            background-image: url('/src/assets/images/bg/sunny-2.jpg');
+        }
+
+        &.bg3 {
+            background-image: url('/src/assets/images/bg/sunny-3.jpg');
+        }
+
+        &.bg4 {
+            background-image: url('/src/assets/images/bg/sunny-4.jpg');
+        }
+
+        .theme-fill {
+            background-image: url('/src/assets/images/overlays/glass-fill-layer-x2/sunny-main-70.png');
+        }
+
+        .theme-fill-ui .background {
+            background-image: url('/src/assets/images/overlays/glass-fill-layer-x2/sunny-ui-100.png');
+        }
+    }
+
+    &.p-sunny {
+        background-image: url('/src/assets/images/bg/p-sunny-1.jpg');
+
+        &.bg2 {
+            background-image: url('/src/assets/images/bg/p-sunny-2.jpg');
+        }
+
+        &.bg3 {
+            background-image: url('/src/assets/images/bg/p-sunny-3.jpg');
+        }
+
+        &.bg4 {
+            background-image: url('/src/assets/images/bg/p-sunny-4.png');
+        }
+
+        &.bg5 {
+            background-image: url('/src/assets/images/bg/p-sunny-5.png');
+        }
+
+        .theme-fill {
+            background-image: url('/src/assets/images/overlays/glass-fill-layer-x2/p-sunny-main-70.png');
+        }
+
+        .theme-fill-ui .background {
+            background-image: url('/src/assets/images/overlays/glass-fill-layer-x2/p-sunny-ui-100.png');
+        }
+    }
+
+    &.cloudy {
+        background-image: url('/src/assets/images/bg/cloudy-1.jpg');
+
+        &.bg2 {
+            background-image: url('/src/assets/images/bg/cloudy-2.jpg');
+        }
+
+        &.bg3 {
+            background-image: url('/src/assets/images/bg/cloudy-3.jpg');
+        }
+
+        &.bg4 {
+            background-image: url('/src/assets/images/bg/cloudy-4.jpg');
+        }
+
+        &.bg5 {
+            background-image: url('/src/assets/images/bg/cloudy-5.jpg');
+        }
+
+        .theme-fill {
+            background-image: url('/src/assets/images/overlays/glass-fill-layer-x2/cloudy-main-70.png');
+        }
+
+        .theme-fill-ui .background {
+            background-image: url('/src/assets/images/overlays/glass-fill-layer-x2/cloudy-ui-100.png');
+        }
+    }
+
+    &.foggy {
+        background-image: url('/src/assets/images/bg/foggy-1.jpg');
+
+        &.bg2 {
+            background-image: url('/src/assets/images/bg/foggy-2.jpg');
+        }
+
+        &.bg3 {
+            background-image: url('/src/assets/images/bg/foggy-3.jpg');
+        }
+
+        &.bg4 {
+            background-image: url('/src/assets/images/bg/foggy-4.jpg');
+        }
+
+        &.bg5 {
+            background-image: url('/src/assets/images/bg/foggy-5.jpg');
+        }
+
+        .theme-fill {
+            background-image: url('/src/assets/images/overlays/glass-fill-layer-x2/foggy-main-70.png');
+        }
+
+        .theme-fill-ui .background {
+            background-image: url('/src/assets/images/overlays/glass-fill-layer-x2/foggy-ui-100.png');
+        }
+    }
+
+    &.hail {
+        background-image: url('/src/assets/images/bg/hail-1.jpg');
+
+        &.bg2 {
+            background-image: url('/src/assets/images/bg/hail-2.jpg');
+        }
+
+        &.bg3 {
+            background-image: url('/src/assets/images/bg/hail-3.jpg');
+        }
+
+        &.bg4 {
+            background-image: url('/src/assets/images/bg/hail-4.jpg');
+        }
+
+        &.bg5 {
+            background-image: url('/src/assets/images/bg/hail-5.jpg');
+        }
+
+        .theme-fill {
+            background-image: url('/src/assets/images/overlays/glass-fill-layer-x2/hail-main-70.png');
+        }
+
+        .theme-fill-ui .background {
+            background-image: url('/src/assets/images/overlays/glass-fill-layer-x2/hail-ui-100.png');
+        }
+    }
+
+    &.rainy {
+        background-image: url('/src/assets/images/bg/rainy-1.jpg');
+
+        &.bg2 {
+            background-image: url('/src/assets/images/bg/rainy-2.jpg');
+        }
+
+        &.bg3 {
+            background-image: url('/src/assets/images/bg/rainy-3.jpg');
+        }
+
+        &.bg4 {
+            background-image: url('/src/assets/images/bg/rainy-4.jpg');
+        }
+
+        &.bg5 {
+            background-image: url('/src/assets/images/bg/rainy-5.jpg');
+        }
+
+        &.bg6 {
+            background-image: url('/src/assets/images/bg/rainy-6.jpg');
+        }
+
+        .theme-fill {
+            background-image: url('/src/assets/images/overlays/glass-fill-layer-x2/rainy-main-70.png');
+        }
+
+        .theme-fill-ui .background {
+            background-image: url('/src/assets/images/overlays/glass-fill-layer-x2/hail-ui-100.png');
+        }
+    }
+
+    &.snowy {
+        background-image: url('/src/assets/images/bg/snowy-1.jpg');
+
+        &.bg2 {
+            background-image: url('/src/assets/images/bg/snowy-2.jpg');
+        }
+
+        &.bg3 {
+            background-image: url('/src/assets/images/bg/snowy-3.jpg');
+        }
+
+        &.bg4 {
+            background-image: url('/src/assets/images/bg/snowy-4.jpg');
+        }
+
+        &.bg5 {
+            background-image: url('/src/assets/images/bg/snowy-5.jpg');
+        }
+
+        .theme-fill {
+            background-image: url('/src/assets/images/overlays/glass-fill-layer-x2/snowy-main-70.png');
+        }
+
+        .theme-fill-ui .background {
+            background-image: url('/src/assets/images/overlays/glass-fill-layer-x2/snowy-ui-100.png');
+        }
+    }
+
+    &.stormy {
+        background-image: url('/src/assets/images/bg/stormy-1.jpg');
+
+        &.bg2 {
+            background-image: url('/src/assets/images/bg/stormy-2.jpg');
+        }
+
+        &.bg3 {
+            background-image: url('/src/assets/images/bg/stormy-3.jpg');
+        }
+
+        &.bg4 {
+            background-image: url('/src/assets/images/bg/stormy-4.jpg');
+        }
+
+        &.bg5 {
+            background-image: url('/src/assets/images/bg/stormy-5.jpg');
+        }
+
+        .theme-fill {
+            background-image: url('/src/assets/images/overlays/glass-fill-layer-x2/stormy-main-70.png');
+        }
+
+        .theme-fill-ui .background {
+            background-image: url('/src/assets/images/overlays/glass-fill-layer-x2/hail-ui-100.png');
+        }
+    }
+}
