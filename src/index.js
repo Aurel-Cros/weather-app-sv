@@ -23,5 +23,7 @@ import './assets/icons/swipe-left.svg';
 
 import './styles/clock.scss';
 import './components/clock';
+import './styles/weather-wheel.scss';
+import './components/weather-wheel';
 
 import './components/app';
