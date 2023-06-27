@@ -183,6 +183,20 @@ main {
 
         border-radius: 50%;
         border: 2px solid $main-text;
+
+        .wind::before {
+            width: 0.875rem;
+            height: 0.7rem;
+        }
+
+        .humidity {
+            font-size: 0.875rem;
+
+            &::before {
+                width: 0.6rem;
+                height: 0.86rem;
+            }
+        }
     }
 }
 
