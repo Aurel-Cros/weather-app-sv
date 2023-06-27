@@ -1,0 +1,1 @@
+// On open, fetch information of random cities

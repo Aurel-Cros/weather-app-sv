@@ -23,3 +23,5 @@ import './assets/icons/swipe-left.svg';
 
 import './styles/clock.scss';
 import './components/clock';
+
+import './components/app';
