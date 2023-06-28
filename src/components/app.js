@@ -6,6 +6,9 @@ const root = document.querySelector("#root");
 const test = new PopupOverlay({
     tag: "h1",
     content: "Coucou ! Test !"
+}, {
+    x: 100,
+    y: 300
 });
 root.appendChild(test);
 
