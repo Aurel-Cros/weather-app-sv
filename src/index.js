@@ -22,8 +22,6 @@ import './assets/icons/search.svg';
 import './assets/icons/swipe-left.svg';
 
 import './styles/clock.scss';
-import './components/clock';
 import './styles/weather-wheel.scss';
-import './components/WeatherWheel';
 
 import './components/app';
