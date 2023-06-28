@@ -5,7 +5,7 @@ export default class PopupOverlay {
         const template = {
             tag: "div",
             attrs: {
-                class: "popup-overlay"
+                class: "popup-overlay theme-fill-ui"
             },
             children: [
                 {
@@ -14,10 +14,16 @@ export default class PopupOverlay {
                     attrs: {
                         class: "popup-close-btn"
                     }
+                },
+                structure,
+                {
+                    tag: "div",
+                    attrs: {
+                        class: "background"
+                    }
                 }
             ]
         };
-        template.children.push(structure);
         this.element = new PageBuilder(template);
 
         this.closeBtn = this.element.querySelector(".popup-close-btn");
