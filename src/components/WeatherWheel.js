@@ -1,3 +1,4 @@
+import PageBuilder from "./PageBuilder.js";
 export default class WeatherWheel {
     constructor() {
         this.$wrapper = document.querySelector(".current-weather");
@@ -7,10 +8,13 @@ export default class WeatherWheel {
         this.wheelHub.remove();
     }
     openWheel() {
-        console.log('Open the wheel !');
         // create wheel element
-        this.wheelHub = document.createElement("div");
-        this.wheelHub.className = "wheel-hub";
+        this.wheelHub = new PageBuilder({
+            tag: "div",
+            attrs: {
+                class: "wheel-hub"
+            }
+        });
 
         const weatherList = [
             'sunny',
@@ -24,12 +28,20 @@ export default class WeatherWheel {
         ]
 
         weatherList.forEach((weather, index) => {
-            const element = document.createElement("div");
-            element.className = "wheel-element";
-            element.style.rotate = `${index * 45}deg`;
+            const element = new PageBuilder({
+                tag: "div",
+                attrs: {
+                    class: "wheel-element",
+                    style: `rotate:${index * 45}deg`
+                }
+            });
 
-            const bgHolder = document.createElement("button");
-            bgHolder.className = "wheel-element-background";
+            const bgHolder = new PageBuilder({
+                tag: "button",
+                attrs: {
+                    class: "wheel-element-background"
+                }
+            });
             bgHolder.style.backgroundImage = `url('weather-${weather}.svg`;
             bgHolder.style.rotate = `-${index * 45}deg`;
 
@@ -37,8 +49,12 @@ export default class WeatherWheel {
             element.appendChild(bgHolder);
             this.wheelHub.appendChild(element);
         })
-        const divMask = document.createElement("div");
-        divMask.className = "wheel-hub-background";
+        const divMask = new PageBuilder({
+            tag: "div",
+            attrs: {
+                class: "wheel-hub-background"
+            }
+        });
         this.wheelHub.appendChild(divMask);
 
         this.$wrapper.appendChild(this.wheelHub);

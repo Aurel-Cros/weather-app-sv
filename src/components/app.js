@@ -1,4 +1,4 @@
-import WeatherWheel from './weather-wheel';
+import WeatherWheel from './WeatherWheel';
 const button = document.querySelector(".current-weather img");
 button.addEventListener("click", () => { new WeatherWheel() });
 
