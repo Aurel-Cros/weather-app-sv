@@ -2,6 +2,7 @@ export default class PageBuilder {
     /**
      * Creates a DOM tree from a JS object literal.
      * Tag is mandatory, other parameters are optional.
+     * Use tag: "TEXTNODE" and the content property to insert text a node.
      * @param {Object} structure
      * {
             tag: "tag name",
@@ -21,6 +22,9 @@ export default class PageBuilder {
     }
 
     makeOne(structure) {
+        if (structure.tag === 'TEXTNODE')
+            return structure.content;
+
         const newElement = document.createElement(structure.tag);
 
         for (const attribute in structure.attrs) {
@@ -29,7 +33,7 @@ export default class PageBuilder {
         newElement.textContent = structure.content || '';
 
         structure.children?.forEach((child) => {
-            newElement.appendChild(this.makeOne(child));
+            newElement.append(this.makeOne(child));
         })
 
         return newElement;

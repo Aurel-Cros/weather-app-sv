@@ -28,4 +28,163 @@ const $ = {
 const today = new Date();
 $.todayDate.textContent = `${today.toLocaleString('en-en', { weekday: 'short' })} ${today.getMonth()}/${today.getDate()}`;
 
+// Pop up templates
+
+const popupTemplates = {
+    searchPopup: {
+        tag: "div",
+        attrs: { class: "search-popup" },
+        children: [
+            {
+                tag: "div",
+                children: [
+                    {
+                        tag: "input",
+                        attrs: {
+                            id: "country-check",
+                            type: "checkbox"
+                        }
+                    },
+                    {
+                        tag: "label",
+                        content: "Country",
+                        attrs: {
+                            class: "country-lock",
+                            for: "country-check"
+                        }
+                    }
+                ]
+            },
+            {
+                tag: "div",
+                children: [
+                    {
+                        tag: "input",
+                        attrs: {
+                            id: "county-check",
+                            type: "checkbox"
+                        }
+                    },
+                    {
+                        tag: "label",
+                        content: "Country",
+                        attrs: {
+                            class: "country-lock",
+                            for: "county-check"
+                        }
+                    }
+                ]
+            },
+            {
+                tag: "input",
+                attrs: {
+                    placeholder: "Search"
+                }
+            }
+        ]
+    },
+    filterPopup: {
+        tag: "div",
+        attrs: {
+            class: "filter-popup"
+        },
+        children: [
+            {
+                tag: "div",
+                children: [
+                    {
+                        tag: "img",
+                        attrs: {
+                            src: "max-temp.svg"
+                        }
+                    },
+                    {
+                        tag: "p",
+                        content: "34°C",
+                        attrs: {
+                            contentEditable: true
+                        }
+                    },
+                    {
+                        tag: "img",
+                        attrs: {
+                            src: "min-temp.svg"
+                        }
+                    },
+                    {
+                        tag: "p",
+                        content: "24°C",
+                        attrs: {
+                            contentEditable: true
+                        }
+                    }
+                ]
+            },
+            {
+                tag: "div",
+                children: [
+                    {
+                        tag: "img",
+                        attrs: {
+                            src: "details-wind.svg"
+                        }
+                    },
+                    {
+                        tag: "p",
+                        content: "00",
+                        attrs: {
+                            contentEditable: true
+                        }
+                    },
+                    {
+                        tag: "p",
+                        content: " - "
+                    },
+                    {
+                        tag: "p",
+                        content: "00",
+                        attrs: {
+                            contentEditable: true
+                        }
+                    },
+                    {
+                        tag: "input",
+                        attrs: {
+                            type: "radio",
+                            name: "speedUnit",
+                            id: "kmh",
+                            value: "kmh",
+                            checked: true
+                        }
+                    },
+                    {
+                        tag: "label",
+                        content: "km/h",
+                        attrs: {
+                            for: "kmh"
+                        }
+                    },
+                    {
+                        tag: "input",
+                        attrs: {
+                            type: "radio",
+                            name: "speedUnit",
+                            id: "mph",
+                            value: "mph"
+                        }
+                    },
+                    {
+                        tag: "label",
+                        content: "mph",
+                        attrs: {
+                            for: "mph"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+};
+
+root.append(new PopupOverlay(popupTemplates.filterPopup, { x: '10px', y: '50%' }))
 // On open, fetch information of random cities
