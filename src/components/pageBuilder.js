@@ -1,4 +1,17 @@
 export default class PageBuilder {
+    /**
+     * Creates a DOM tree from a JS object literal.
+     * Tag is mandatory, other parameters are optional.
+     * @param {Object} structure
+     * {
+            tag: "tag name",
+            attrs: {
+                attribute: "value"
+            },
+            content: "Text"
+            children: [{},...]
+        }
+     */
     constructor(structure) {
         if (Array.isArray(structure))
             throw new Exception('Wrong format');
@@ -22,33 +35,3 @@ export default class PageBuilder {
         return newElement;
     }
 }
-/*
-const test = {
-    tag: "div",
-    attrs: {
-        id: "container",
-        draggable: false
-    },
-    children: [
-        {
-            tag: "p",
-            content: "Blabla"
-        },
-        {
-            tag: "div",
-            attrs: { class: "column" },
-            children: [
-                {
-                    tag: "p",
-                    content: "Bonjour les loulous",
-                    attrs: {
-                        class: "pouet"
-                    }
-                }
-            ]
-        }
-    ]
-}
-
-const newPage = new PageBuilder(test);
-*/
