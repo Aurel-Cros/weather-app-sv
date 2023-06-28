@@ -5,7 +5,10 @@
     border: 1px solid #787671;
     z-index: 10;
     padding: 0.5rem;
-    font-size: 0.75rem;
+    font-size: 0.625rem;
+
+    top: -100%;
+    transition: top 600ms ease-in-out;
 
     &::before {
         content: "";
@@ -21,9 +24,10 @@
 
 .popup-close-btn {
     color: rgba(255, 255, 255, 0.7);
-    font-weight: bold;
-    font-size: 1rem;
+    font-family: Orbitron;
+    font-weight: 700;
+    font-size: 0.875rem;
     position: absolute;
-    top: 0.3rem;
-    right: 0.5rem;
+    top: 0.1rem;
+    right: 0.2rem;
 }

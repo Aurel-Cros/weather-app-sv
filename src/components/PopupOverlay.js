@@ -37,12 +37,16 @@ export default class PopupOverlay {
     position() {
         const x = this.mouseCoordinates.x;
         const y = this.mouseCoordinates.y;
-
-        this.element.style.left = x + 'px';
-        this.element.style.top = y + 'px';
+        this.element.style.left = x;
+        setTimeout(() => {
+            this.element.style.top = y;
+        });
     }
     close() {
-        this.element.remove();
+        this.element.style.top = '-100%';
+        setTimeout(() => {
+            this.element.remove();
+        }, 600);
     }
 
 }
