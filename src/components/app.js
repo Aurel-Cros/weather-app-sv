@@ -3,14 +3,6 @@ import WeatherWheel from './WeatherWheel';
 import Clock from './Clock';
 
 const root = document.querySelector("#root");
-const test = new PopupOverlay({
-    tag: "h1",
-    content: "Coucou ! Test !"
-}, {
-    x: 100,
-    y: 300
-});
-root.appendChild(test);
 
 const currWeatherIcon = document.querySelector(".current-weather img");
 currWeatherIcon.addEventListener("click", () => { new WeatherWheel() });
