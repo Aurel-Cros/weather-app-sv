@@ -25,4 +25,6 @@ import './styles/clock.scss';
 import './styles/weather-wheel.scss';
 import './styles/popup-overlay.scss';
 
+import './data/city.list.json';
+
 import './components/app';

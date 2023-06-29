@@ -43,7 +43,7 @@ const config = {
                 use: [stylesHandler, 'css-loader', 'sass-loader'],
             },
             {
-                test: /\.(svg|eot|ttf|woff|woff2|png|jpg|gif)$/i,
+                test: /\.(svg|eot|ttf|woff|woff2|png|jpg|gif|json)$/i,
                 type: 'asset/resource',
                 generator: {
                     filename: '[name][ext]'
