@@ -2,6 +2,13 @@ import PageBuilder from "./PageBuilder.js";
 
 export default class PopupOverlay {
     constructor(structure, position) {
+        if (PopupOverlay.exists) {
+            PopupOverlay.instance.close()
+            return { empty: true }
+        }
+        PopupOverlay.exists = true;
+        PopupOverlay.instance = this;
+
         this.mouseCoordinates = position;
 
         const template = {
@@ -40,13 +47,18 @@ export default class PopupOverlay {
         this.element.style.left = x;
         setTimeout(() => {
             this.element.style.top = y;
+            this.element.style.translate = "-50% 0";
         });
     }
     close() {
-        this.element.style.top = '-100%';
+        PopupOverlay.exists = false;
+        PopupOverlay.instance = null;
+
+        this.element.style.top = '-10%';
+        this.element.style.translate = '-50% -100%';
         setTimeout(() => {
             this.element.remove();
-        }, 600);
+        }, 1000);
     }
 
 }
