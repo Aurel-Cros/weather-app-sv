@@ -1,6 +1,7 @@
 import PopupOverlay from "./PopupOverlay.js";
 import WeatherWheel from './WeatherWheel';
 import Clock from './Clock';
+import { popupTemplates } from "./Templates.js";
 
 const root = document.querySelector("#root");
 
@@ -10,7 +11,7 @@ currWeatherIcon.addEventListener("click", () => { new WeatherWheel() });
 const clockElement = new Clock('.weather-graph-values');
 
 // Select data elements
-const $ = {
+export const $ = {
     currentWeather: document.querySelector(".current-weather p"),
     cityName: document.querySelector(".city-name"),
     countryName: document.querySelector(".country"),
@@ -28,163 +29,19 @@ const $ = {
 const today = new Date();
 $.todayDate.textContent = `${today.toLocaleString('en-en', { weekday: 'short' })} ${today.getMonth()}/${today.getDate()}`;
 
-// Pop up templates
+$.mainTemp.addEventListener("click", (e) => {
+    const x = `50%`;
+    const y = `${e.clientY - e.layerY / 2}px`;
+    console.log(x, y)
+    root.append(new PopupOverlay(popupTemplates.filterPopup, { x: x, y: y }))
+})
 
-const popupTemplates = {
-    searchPopup: {
-        tag: "div",
-        attrs: { class: "search-popup" },
-        children: [
-            {
-                tag: "div",
-                children: [
-                    {
-                        tag: "input",
-                        attrs: {
-                            id: "country-check",
-                            type: "checkbox"
-                        }
-                    },
-                    {
-                        tag: "label",
-                        content: "Country",
-                        attrs: {
-                            class: "country-lock",
-                            for: "country-check"
-                        }
-                    }
-                ]
-            },
-            {
-                tag: "div",
-                children: [
-                    {
-                        tag: "input",
-                        attrs: {
-                            id: "county-check",
-                            type: "checkbox"
-                        }
-                    },
-                    {
-                        tag: "label",
-                        content: "Country",
-                        attrs: {
-                            class: "country-lock",
-                            for: "county-check"
-                        }
-                    }
-                ]
-            },
-            {
-                tag: "input",
-                attrs: {
-                    placeholder: "Search"
-                }
-            }
-        ]
-    },
-    filterPopup: {
-        tag: "div",
-        attrs: {
-            class: "filter-popup"
-        },
-        children: [
-            {
-                tag: "div",
-                children: [
-                    {
-                        tag: "img",
-                        attrs: {
-                            src: "max-temp.svg"
-                        }
-                    },
-                    {
-                        tag: "p",
-                        content: "34°C",
-                        attrs: {
-                            contentEditable: true
-                        }
-                    },
-                    {
-                        tag: "img",
-                        attrs: {
-                            src: "min-temp.svg"
-                        }
-                    },
-                    {
-                        tag: "p",
-                        content: "24°C",
-                        attrs: {
-                            contentEditable: true
-                        }
-                    }
-                ]
-            },
-            {
-                tag: "div",
-                children: [
-                    {
-                        tag: "img",
-                        attrs: {
-                            src: "details-wind.svg"
-                        }
-                    },
-                    {
-                        tag: "p",
-                        content: "00",
-                        attrs: {
-                            contentEditable: true
-                        }
-                    },
-                    {
-                        tag: "p",
-                        content: " - "
-                    },
-                    {
-                        tag: "p",
-                        content: "00",
-                        attrs: {
-                            contentEditable: true
-                        }
-                    },
-                    {
-                        tag: "input",
-                        attrs: {
-                            type: "radio",
-                            name: "speedUnit",
-                            id: "kmh",
-                            value: "kmh",
-                            checked: true
-                        }
-                    },
-                    {
-                        tag: "label",
-                        content: "km/h",
-                        attrs: {
-                            for: "kmh"
-                        }
-                    },
-                    {
-                        tag: "input",
-                        attrs: {
-                            type: "radio",
-                            name: "speedUnit",
-                            id: "mph",
-                            value: "mph"
-                        }
-                    },
-                    {
-                        tag: "label",
-                        content: "mph",
-                        attrs: {
-                            for: "mph"
-                        }
-                    }
-                ]
-            }
-        ]
-    }
-};
-
-root.append(new PopupOverlay(popupTemplates.filterPopup, { x: '10px', y: '50%' }))
+$.cityName.addEventListener("click", (e) => {
+    const x = `50%`;
+    const y = `${e.clientY}px`;
+    console.log(e, x, y);
+    const searchPopup = new PopupOverlay(popupTemplates.searchPopup, { x: x, y: y });
+    if (!searchPopup.empty)
+        root.append(searchPopup);
+})
 // On open, fetch information of random cities
