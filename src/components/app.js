@@ -13,6 +13,7 @@ export const $ = {
     currentWeatherIcon: document.querySelector(".current-weather img"),
     cityName: document.querySelector(".city-name p"),
     countryName: document.querySelector(".country"),
+    countryFlag: document.querySelector(".country img"),
     countyName: document.querySelector(".country span"),
     highTemp: document.querySelector(".temp-hi"),
     lowTemp: document.querySelector(".temp-lo"),
@@ -62,14 +63,15 @@ const makePopup = (e, type) => {
 
 // const apiKeyOWM = '5d376246ec5123d7e576ffd3bb8a5db4';
 // const apiUrl = `https://api.openweathermap.org/data/2.5/weather?appid=${apiKeyOWM}`;
-// const apiParameters = `&lat=${city.coord.lat}&lon=${city.coord.lon}`
+// const apiParameters = `&units=metric&lat=${city.coord.lat}&lon=${city.coord.lon}`
 // const randomCity = await fetch(apiUrl + apiParameters)
 //     .then(response => response.json())
 //     .then(data => data);
-const randomCityString = {
+const randomCityString = `{
     "coord": {
         "lon": 8.7174, "lat": 45.9784
-    }, "weather": [
+    },
+    "weather": [
         {
             "id": 804,
             "main": "Clouds", "description": "overcast clouds", "icon": "04d"
@@ -77,10 +79,10 @@ const randomCityString = {
     ],
     "base": "stations",
     "main": {
-        "temp": 296.34,
-        "feels_like": 296.41,
-        "temp_min": 295.08,
-        "temp_max": 297.69,
+        "temp": 27.3,
+        "feels_like": 28.1,
+        "temp_min": 21.8,
+        "temp_max": 29.9,
         "pressure": 1019,
         "humidity": 65
     },
@@ -100,7 +102,19 @@ const randomCityString = {
     "id": 6534440,
     "name": "Brezzo di Bedero",
     "cod": 200
-};
+}`;
 const randomCity = JSON.parse(randomCityString);
+
+const countryInfo = await fetch('country_dial_info.json')
+    .then(response => response.json())
+    .then(data => data.find(country => country.code == randomCity.sys.country));
+
+$.currentWeatherName.textContent = randomCity.weather[0].main;
+$.countryFlag.src = `https://flagsapi.com/${randomCity.sys.country}/flat/32.png`;
+$.countryName.append(countryInfo.name);
 $.cityName.textContent = randomCity.name;
-$.countryName.textContent = randomCity.sys.country;
+$.mainWind.textContent = randomCity.wind.speed + ' km/h';
+$.mainTemp.textContent = Math.trunc(randomCity.main.temp) + '°';
+$.mainHumi.textContent = randomCity.main.humidity + '%';
+$.highTemp.textContent = Math.trunc(randomCity.main.temp_max) + '°';
+$.lowTemp.textContent = Math.trunc(randomCity.main.temp_min) + '°';
