@@ -47,7 +47,7 @@ export default class PopupOverlay {
         this.element.style.left = x;
         setTimeout(() => {
             this.element.style.top = y;
-            this.element.style.translate = "-50% 0";
+            this.element.style.translate = "-50% -30%";
         });
     }
     close() {

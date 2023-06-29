@@ -98,8 +98,6 @@ main {
     font-family: Orbitron;
     font-weight: 700;
 
-    cursor: pointer;
-
     margin: 0.9rem auto 0.9rem;
 
     >p:first-of-type {
@@ -112,9 +110,6 @@ main {
         border-radius: 0.25rem;
     }
 
-    &:hover {
-        color: white;
-    }
 }
 
 .country {
@@ -129,6 +124,12 @@ main {
 
     span {
         font-size: 1rem;
+    }
+
+    cursor: pointer;
+
+    &:hover {
+        color: white;
     }
 }
 
@@ -217,8 +218,6 @@ main {
     font-family: Orbitron;
     font-weight: 700;
     margin: 0;
-
-    text-shadow: inner 2px 2px 4px rgba(0, 0, 0, 0.25);
 }
 
 .icon-text {

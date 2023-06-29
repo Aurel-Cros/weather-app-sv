@@ -30,18 +30,19 @@ const today = new Date();
 $.todayDate.textContent = `${today.toLocaleString('en-en', { weekday: 'short' })} ${today.getMonth()}/${today.getDate()}`;
 
 $.mainTemp.addEventListener("click", (e) => {
-    const x = `50%`;
-    const y = `${e.clientY - e.layerY / 2}px`;
-    console.log(x, y)
-    root.append(new PopupOverlay(popupTemplates.filterPopup, { x: x, y: y }))
-})
+    makePopup(e, 'filterPopup');
+});
 
-$.cityName.addEventListener("click", (e) => {
+$.countryName.addEventListener("click", (e) => {
+    makePopup(e, 'searchPopup');
+});
+
+const makePopup = (e, type) => {
     const x = `50%`;
-    const y = `${e.clientY}px`;
+    const y = `${e.clientY - e.offsetY}px`;
     console.log(e, x, y);
-    const searchPopup = new PopupOverlay(popupTemplates.searchPopup, { x: x, y: y });
-    if (!searchPopup.empty)
-        root.append(searchPopup);
-})
+    const popup = new PopupOverlay(popupTemplates[type], { x: x, y: y });
+    if (!popup.empty)
+        root.append(popup);
+}
 // On open, fetch information of random cities
