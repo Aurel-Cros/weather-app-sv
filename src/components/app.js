@@ -1,7 +1,8 @@
 import PopupOverlay from "./PopupOverlay.js";
 import WeatherWheel from './WeatherWheel';
 import Clock from './Clock';
-import { popupTemplates } from "./templates.js";
+import { predictionCardTemplate, popupTemplates } from "./templates.js";
+import PageBuilder from "./PageBuilder.js";
 
 const root = document.querySelector("#root");
 
@@ -30,7 +31,7 @@ $.currentWeatherIcon.addEventListener("click", () => { new WeatherWheel() });
 
 // Display the date of today
 const today = new Date();
-$.todayDate.textContent = `${today.toLocaleString('en-en', { weekday: 'short' })} ${today.getMonth()}/${today.getDate()}`;
+$.todayDate.textContent = `${today.toLocaleString('en-GB', { weekday: 'long' })} ${today.getMonth() + 1}/${today.getDate()}`;
 
 // Search popup when clicking on the country name
 $.countryName.addEventListener("click", (e) => {
@@ -62,98 +63,83 @@ const city = await fetch('city.list.json')
     })
 
 const apiKeyOWM = '5d376246ec5123d7e576ffd3bb8a5db4';
-const apiUrl = `https://api.openweathermap.org/data/2.5/weather?appid=${apiKeyOWM}`;
+const apiUrlRoot = `https://api.openweathermap.org/data/2.5/`
+const apiKey = `?appid=${apiKeyOWM}`;
+const apiCurrent = 'weather';
+const apiForecast = `forecast`;
 const apiParameters = `&units=metric&lat=${city.coord.lat}&lon=${city.coord.lon}`
-const randomCity = await fetch(apiUrl + apiParameters)
+
+const randomCity = await fetch(apiUrlRoot + apiCurrent + apiKey + apiParameters)
     .then(response => response.json())
-    .then(data => data);
-// const randomCityString = `{
-//     "coord": {
-//         "lon": 8.7174, "lat": 45.9784
-//     },
-//     "weather": [
-//         {
-//             "id": 804,
-//             "main": "Clouds", "description": "overcast clouds", "icon": "04d"
-//         }
-//     ],
-//     "base": "stations",
-//     "main": {
-//         "temp": 27.3,
-//         "feels_like": 28.1,
-//         "temp_min": 21.8,
-//         "temp_max": 29.9,
-//         "pressure": 1019,
-//         "humidity": 65
-//     },
-//     "visibility": 10000,
-//     "wind": {
-//         "speed": 0.51,
-//         "deg": 0
-//     },
-//     "clouds": {
-//         "all": 100
-//     },
-//     "dt": 1688032439,
-//     "sys": {
-//         "type": 2, "id": 2036943, "country": "IT", "sunrise": 1688009819, "sunset": 1688066387
-//     },
-//     "timezone": 7200,
-//     "id": 6534440,
-//     "name": "Brezzo di Bedero",
-//     "cod": 200
-// }`;
-// const randomCity = JSON.parse(randomCityString);
+    .then(data => data)
+    .catch(err => { console.error(err) });
+
+const forecast5Days = await fetch(apiUrlRoot + apiForecast + apiKey + apiParameters)
+    .then(response => response.json())
+    .then(data => { console.log(data); return data })
+    .catch(err => { console.error(err) });
 
 const countryInfo = await fetch('country_dial_info.json')
     .then(response => response.json())
     .then(data => data.find(country => country.code == randomCity.sys.country));
 
-const backgroundNumber = Math.round(Math.random() * 5);
-console.log(randomCity.weather[0].main);
-console.log(randomCity.clouds);
-switch (randomCity.weather[0].main) {
-    case 'Clear':
-        $.currentWeatherIcon.src = "weather-sunny.svg";
-        root.className = `sunny bg${backgroundNumber}`;
-        break;
-    case 'Drizzle':
-    case 'Rain':
-        $.currentWeatherIcon.src = "weather-rain.svg";
-        root.className = `rainy bg${backgroundNumber}`;
-        break;
-    case 'Thunderstorm':
-        $.currentWeatherIcon.src = "weather-thunderstorm.svg";
-        root.className = `stormy bg${backgroundNumber}`;
-        break;
-    case 'Snow':
-        $.currentWeatherIcon.src = "weather-snow.svg"
-        root.className = `snowy bg${backgroundNumber}`;
-        break;
-    case 'Mist':
-    case 'Smoke':
-    case 'Haze':
-    case 'Dust':
-    case 'Fog':
-    case 'Sand':
-    case 'Ash':
-    case 'Squall':
-    case 'Tornado':
-        $.currentWeatherIcon.src = "weather-fog.svg";
-        root.className = `foggy bg${backgroundNumber}`;
-        break;
-    case 'Clouds':
-        if (randomCity.clouds.all < 11)
-            $.currentWeatherIcon.src = "weather-sunny.svg";
-        else if (randomCity.clouds.all < 30) {
-            $.currentWeatherIcon.src = "weather-partly-cloudy.svg";
-            root.className = `p-sunny bg${backgroundNumber}`;
-        }
-        else {
-            $.currentWeatherIcon.src = "weather-cloudy.svg";
-            root.className = `cloudy bg${backgroundNumber}`;
-        }
-        break;
+const backgroundNumber = Math.round(Math.random() * 5) || 1;
+
+// INSERT CURRENT WEATHER DATA IN THE DISPLAY
+
+$.currentWeatherIcon.alt = `Current weather : ${randomCity.weather[0].main} (${randomCity.weather[0].description})`;
+$.currentWeatherIcon.src = getWeatherAssets(randomCity.weather[0].main).icon;
+root.className = getWeatherAssets(randomCity.weather[0].main).rootClass + ` bg${backgroundNumber}`;
+
+function getWeatherAssets(weatherName) {
+    const assets = {
+        icon: null,
+        rootClass: null
+    }
+    switch (weatherName) {
+        case 'Clear':
+            assets.icon = "weather-sunny.svg";
+            assets.rootClass = `sunny`;
+            break;
+        case 'Drizzle':
+        case 'Rain':
+            assets.icon = "weather-rain.svg";
+            assets.rootClass = `rainy`;
+            break;
+        case 'Thunderstorm':
+            assets.icon = "weather-thunderstorm.svg";
+            assets.rootClass = `stormy`;
+            break;
+        case 'Snow':
+            assets.icon = "weather-snow.svg"
+            assets.rootClass = `snowy`;
+            break;
+        case 'Mist':
+        case 'Smoke':
+        case 'Haze':
+        case 'Dust':
+        case 'Fog':
+        case 'Sand':
+        case 'Ash':
+        case 'Squall':
+        case 'Tornado':
+            assets.icon = "weather-fog.svg";
+            assets.rootClass = `foggy`;
+            break;
+        case 'Clouds':
+            if (randomCity.clouds.all < 11)
+                assets.icon = "weather-sunny.svg";
+            else if (randomCity.clouds.all < 30) {
+                assets.icon = "weather-partly-cloudy.svg";
+                assets.rootClass = `p-sunny`;
+            }
+            else {
+                assets.icon = "weather-cloudy.svg";
+                assets.rootClass = `cloudy`;
+            }
+            break;
+    }
+    return assets;
 }
 
 $.currentWeatherName.textContent = randomCity.weather[0].main;
@@ -169,3 +155,42 @@ $.lowTemp.textContent = Math.trunc(randomCity.main.temp_min) + '°';
 $.mainWind.textContent = Math.round(10 * randomCity.wind.speed / 3.6) / 10 + ' km/h'; // m/s to km/h
 
 $.mainHumi.textContent = randomCity.main.humidity + '%';
+
+// INSERT DATA IN THE 5 DAYS PREDICTION ZONE
+
+const forecastResults = [];
+forecast5Days.list.forEach(prediction => {
+    const predDate = new Date(prediction.dt * 1000); // PHP sends seconds, JS uses milliseconds
+    const day = predDate.getDate();
+    const dayName = predDate.toLocaleString('en-GB', { weekday: 'short' });
+
+    let dayForecast = forecastResults.findLast(a => a.day === day);
+    if (!dayForecast) {
+        forecastResults.push({ day: day, dayName: dayName });
+        dayForecast = forecastResults.findLast(a => a.day === day);
+        dayForecast.temps = [];
+        dayForecast.chanceOfRain = [];
+        dayForecast.weather = {};
+    }
+    dayForecast.temps.push(prediction.main.temp);
+    dayForecast.chanceOfRain.push(prediction.pop);
+    dayForecast.weather[prediction.weather[0].main] = (dayForecast.weather[prediction.weather[0].main] ?? 0) + 1;
+})
+forecastResults.forEach(day => {
+    if (day.day === new Date().getDate())
+        return;
+    const sortedTemps = day.temps.sort((a, b) => a - b);
+    const minTemp = Math.trunc(sortedTemps[0]);
+    const maxTemp = Math.trunc(sortedTemps.findLast(a => 1));
+    const avgHumi = Math.trunc(day.chanceOfRain.reduce((accu, humi) => accu + humi * 100, 0) / day.chanceOfRain.length);
+    const predCard = new PageBuilder(predictionCardTemplate);
+
+    const dayWeather = Object.entries(day.weather).reduce((max, entry) => entry[1] >= max[1] ? entry : max, [0, -Infinity])
+
+    predCard.querySelector(".day").textContent = `${day.dayName}`;
+    predCard.querySelector(".min-max-temps").textContent = minTemp + "° / " + maxTemp + "°";
+    predCard.querySelector(".chanceOfRain").textContent = avgHumi + "%";
+    predCard.querySelector("img").src = getWeatherAssets(dayWeather[0]).icon;
+    $.fiveDays.append(predCard);
+})
+

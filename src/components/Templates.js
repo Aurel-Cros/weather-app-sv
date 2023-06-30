@@ -242,3 +242,32 @@ export const popupTemplates = {
         ]
     }
 };
+
+export const predictionCardTemplate = {
+    tag: "div",
+    attrs: { class: "pred-card" },
+    children: [
+        {
+            tag: "p",
+            attrs: {
+                class: "day"
+            }
+        },
+        {
+            tag: "img"
+        },
+        {
+            tag: "p",
+            attrs: {
+                class: "min-max-temps"
+            }
+        },
+        {
+            tag: "p",
+            attrs: {
+                class: "chanceOfRain",
+                title: "Probability of precipitation"
+            }
+        }
+    ]
+}
