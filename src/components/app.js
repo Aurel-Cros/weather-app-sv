@@ -76,7 +76,7 @@ const randomCity = await fetch(apiUrlRoot + apiCurrent + apiKey + apiParameters)
 
 const forecast5Days = await fetch(apiUrlRoot + apiForecast + apiKey + apiParameters)
     .then(response => response.json())
-    .then(data => { console.log(data); return data })
+    .then(data => data)
     .catch(err => { console.error(err) });
 
 const countryInfo = await fetch('country_dial_info.json')
@@ -195,3 +195,19 @@ forecastResults.forEach(day => {
     $.fiveDays.append(predCard);
 })
 
+// Get short text from Wikipedia
+const wikiApiRoot = "https://en.wikipedia.org/api/rest_v1/page/summary/";
+fetch(wikiApiRoot + randomCity.name)
+    .then(response => response.json())
+    .then(data => {
+        if (data.title === 'Not found.')
+            return
+        console.log(data.extract.length)
+        const wikiExtract = data.extract.length > 300 ? data.extract.slice(0, 300) + '...' : data.extract_html;
+        const wikiUrl = data.content_urls.mobile.page;
+
+        $.shortText.innerHTML = wikiExtract;
+        const wikiLink = new PageBuilder({ tag: "a", attrs: { href: wikiUrl }, content: "+", target: "_blank" })
+        $.shortText.append(wikiLink);
+    })
+    .catch(err => { console.log(err); return err });
