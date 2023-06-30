@@ -52,13 +52,15 @@ const makePopup = (e, type) => {
 }
 
 // On open, fetch information of random cities
-const city = await fetch('https://hiveword.com/papi/random/locationNames')
+const city = await fetch('city.list.json')
     .then((response) => response.json())
-    .then((data) => data[0])
-const coords = city.googleMapsLink.split('&q=')[1]
-city.coord.lat = coords.split(',')[0];
-city.coord.lon = coords.split(',')[1];
-console.log(city);
+    .then((data) => {
+        const randomNumber = Math.trunc(Math.random() * data.length);
+        return data[randomNumber];
+    })
+    .catch(e => {
+        console.error(e)
+    })
 
 const apiKeyOWM = '5d376246ec5123d7e576ffd3bb8a5db4';
 const apiUrlRoot = `https://api.openweathermap.org/data/2.5/`
@@ -67,7 +69,7 @@ const apiCurrent = 'weather';
 const apiForecast = `forecast`;
 const apiParameters = `&units=metric&lat=${city.coord.lat}&lon=${city.coord.lon}`
 
-const randomCityWeather = await fetch(apiUrlRoot + apiCurrent + apiKey + apiParameters)
+const randomCity = await fetch(apiUrlRoot + apiCurrent + apiKey + apiParameters)
     .then(response => response.json())
     .then(data => data)
     .catch(err => { console.error(err) });
@@ -77,13 +79,17 @@ const forecast5Days = await fetch(apiUrlRoot + apiForecast + apiKey + apiParamet
     .then(data => data)
     .catch(err => { console.error(err) });
 
+const countryInfo = await fetch('country_dial_info.json')
+    .then(response => response.json())
+    .then(data => data.find(country => country.code == randomCity.sys.country));
+
 const backgroundNumber = Math.round(Math.random() * 5) || 1;
 
 // INSERT CURRENT WEATHER DATA IN THE DISPLAY
 
-$.currentWeatherIcon.alt = `Current weather : ${randomCityWeather.weather[0].main} (${randomCityWeather.weather[0].description})`;
-$.currentWeatherIcon.src = getWeatherAssets(randomCityWeather.weather[0].main).icon;
-root.className = getWeatherAssets(randomCityWeather.weather[0].main).rootClass + ` bg${backgroundNumber}`;
+$.currentWeatherIcon.alt = `Current weather : ${randomCity.weather[0].main} (${randomCity.weather[0].description})`;
+$.currentWeatherIcon.src = getWeatherAssets(randomCity.weather[0].main).icon;
+root.className = getWeatherAssets(randomCity.weather[0].main).rootClass + ` bg${backgroundNumber}`;
 
 function getWeatherAssets(weatherName) {
     const assets = {
@@ -121,9 +127,9 @@ function getWeatherAssets(weatherName) {
             assets.rootClass = `foggy`;
             break;
         case 'Clouds':
-            if (randomCityWeather.clouds.all < 11)
+            if (randomCity.clouds.all < 11)
                 assets.icon = "weather-sunny.svg";
-            else if (randomCityWeather.clouds.all < 30) {
+            else if (randomCity.clouds.all < 30) {
                 assets.icon = "weather-partly-cloudy.svg";
                 assets.rootClass = `p-sunny`;
             }
@@ -136,19 +142,19 @@ function getWeatherAssets(weatherName) {
     return assets;
 }
 
-$.currentWeatherName.textContent = randomCityWeather.weather[0].main;
+$.currentWeatherName.textContent = randomCity.weather[0].main;
 
-$.cityName.textContent = city.name;
-$.countryName.append(city.country);
-$.countryFlag.src = `https://flagsapi.com/${city.countryDigraph}/flat/32.png`;
+$.cityName.textContent = randomCity.name;
+$.countryName.append(countryInfo.name);
+$.countryFlag.src = `https://flagsapi.com/${randomCity.sys.country}/flat/32.png`;
 
-$.mainTemp.textContent = Math.trunc(randomCityWeather.main.temp) + '°';
-$.highTemp.textContent = Math.trunc(randomCityWeather.main.temp_max) + '°';
-$.lowTemp.textContent = Math.trunc(randomCityWeather.main.temp_min) + '°';
+$.mainTemp.textContent = Math.trunc(randomCity.main.temp) + '°';
+$.highTemp.textContent = Math.trunc(randomCity.main.temp_max) + '°';
+$.lowTemp.textContent = Math.trunc(randomCity.main.temp_min) + '°';
 
-$.mainWind.textContent = Math.round(10 * randomCityWeather.wind.speed / 3.6) / 10 + ' km/h'; // m/s to km/h
+$.mainWind.textContent = Math.round(10 * randomCity.wind.speed / 3.6) / 10 + ' km/h'; // m/s to km/h
 
-$.mainHumi.textContent = randomCityWeather.main.humidity + '%';
+$.mainHumi.textContent = randomCity.main.humidity + '%';
 
 // INSERT DATA IN THE 5 DAYS PREDICTION ZONE
 
@@ -191,7 +197,7 @@ forecastResults.forEach(day => {
 
 // Get short text from Wikipedia
 const wikiApiRoot = "https://en.wikipedia.org/api/rest_v1/page/summary/";
-fetch(wikiApiRoot + city.name)
+fetch(wikiApiRoot + randomCity.name)
     .then(response => response.json())
     .then(data => {
         if (data.title === 'Not found.')
