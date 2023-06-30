@@ -191,6 +191,7 @@ forecastResults.forEach(day => {
     predCard.querySelector(".min-max-temps").textContent = minTemp + "° / " + maxTemp + "°";
     predCard.querySelector(".chanceOfRain").textContent = avgHumi + "%";
     predCard.querySelector("img").src = getWeatherAssets(dayWeather[0]).icon;
+    predCard.querySelector("img").alt = dayWeather[0];
     $.fiveDays.append(predCard);
 })
 
