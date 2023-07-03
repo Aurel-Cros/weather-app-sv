@@ -18,13 +18,22 @@ const config = {
         clean: true,
         path: path.resolve(__dirname, 'dist'),
     },
-    watch: true,
     watchOptions: {
         aggregateTimeout: 1000
     },
     devServer: {
         open: true,
         host: 'localhost',
+        client: {
+            logging: 'none',
+            progress: true
+        },
+        compress: true,
+        magicHtml: true,
+        static: {
+            directory: path.join(__dirname, 'dist')
+        },
+        watchFiles: ['dist/**']
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -47,10 +56,31 @@ const config = {
                 use: [stylesHandler, 'css-loader', 'sass-loader'],
             },
             {
-                test: /\.(svg|eot|ttf|woff|woff2|png|jpg|gif|json)$/i,
+                test: /\.(eot|ttf|woff|woff2)$/i,
                 type: 'asset/resource',
                 generator: {
-                    filename: '[name][ext]'
+                    filename: 'assets/fonts/[name][ext]'
+                }
+            },
+            {
+                test: /\.(svg)$/i,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'assets/icons/[name][ext]'
+                }
+            },
+            {
+                test: /\.(png|jpg|gif)$/i,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'assets/images/[name][ext]'
+                }
+            },
+            {
+                test: /\.(json)$/i,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'assets/data/[name][ext]'
                 }
             }
 

@@ -6,6 +6,7 @@
     "@rollup/plugin-terser": "^0.4.3",
     "@webpack-cli/generators": "^3.0.7",
     "babel-loader": "^9.1.2",
+    "concurrently": "^8.2.0",
     "css-loader": "^6.8.1",
     "html-webpack-plugin": "^5.5.3",
     "mini-css-extract-plugin": "^2.7.6",
@@ -24,7 +25,8 @@
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
-    "watch": "webpack --watch --aggregateTimeout=5000",
-    "start": "webpack serve"
+    "watch": "webpack --watch",
+    "start": "webpack serve",
+    "dev": "concurrently \"npm run watch\" \"npm start\""
   }
 }
