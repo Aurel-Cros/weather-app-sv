@@ -42,7 +42,7 @@ export default class WeatherWheel {
                     class: "wheel-element-background"
                 }
             });
-            bgHolder.style.backgroundImage = `url('weather-${weather}.svg`;
+            bgHolder.style.backgroundImage = `url('assets/icons/weather-${weather}.svg`;
             bgHolder.style.rotate = `-${index * 45}deg`;
 
             bgHolder.addEventListener("click", () => this.closeWheel());

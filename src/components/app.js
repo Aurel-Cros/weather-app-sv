@@ -89,20 +89,35 @@ class App {
             }
         };
 
-        const data = await fetch(url, options)
-            .then(response => response.json())
-            .then(data => data.data[0])
-            .catch(() => 'No data');
+        const fetcher = async (fetchUrl, fetchOptions) => {
+            return await fetch(fetchUrl, fetchOptions)
+                .then(response => response.json())
+                .then(data => data.data[0])
+                .catch(async () => {
+                    return await onError(fetchUrl, fetchOptions)
+                })
+        }
+
+        const onError = async (errUrl, errOptions) => {
+            return new Promise((resolve, reject) => {
+                setTimeout(async () => {
+                    console.log('Fetch failed, retrying in 1 sec...');
+                    resolve(await fetcher(errUrl, errOptions));
+                }, 1000);
+            })
+        }
+
+        const returnedData = await fetcher(url, options);
 
         this.city = {
-            name: data.name,
-            countryName: data.country,
-            countryCode: data.countryCode,
-            regionName: data.region,
-            wikiDataId: data.wikiDataId,
+            name: returnedData.name,
+            countryName: returnedData.country,
+            countryCode: returnedData.countryCode,
+            regionName: returnedData.region,
+            wikiDataId: returnedData.wikiDataId,
             coord: {
-                lat: data.latitude,
-                lon: data.longitude
+                lat: returnedData.latitude,
+                lon: returnedData.longitude
             },
             weather: {
 
@@ -224,8 +239,13 @@ class App {
         // Get short text from Wikipedia
         const getWikiUrl = await fetch(`https://www.wikidata.org/w/api.php?origin=*&action=wbgetentities&props=sitelinks/urls&ids=${this.city.wikiDataId}&format=json&sitefilter=enwiki`)
             .then(response => response.json())
-            .then(data => data.entities[this.city.wikiDataId].sitelinks.enwiki.url);
-
+            .then(data => data.entities[this.city.wikiDataId].sitelinks.enwiki.url)
+            .catch(() => {
+                console.log('No wiki data.')
+                return false
+            });
+        if (!getWikiUrl)
+            return;
         const wikiId = getWikiUrl.split('/').findLast(() => true);
         console.log(wikiId);
         const wikiApiRoot = "https://en.wikipedia.org/api/rest_v1/page/summary/";
@@ -248,25 +268,25 @@ class App {
     }
     getWeatherAssets(weatherName) {
         const assets = {
-            icon: null,
+            icon: 'assets/icons/',
             rootClass: null
         }
         switch (weatherName) {
             case 'Clear':
-                assets.icon = "weather-sunny.svg";
+                assets.icon += "weather-sunny.svg";
                 assets.rootClass = `sunny`;
                 break;
             case 'Drizzle':
             case 'Rain':
-                assets.icon = "weather-rain.svg";
+                assets.icon += "weather-rain.svg";
                 assets.rootClass = `rainy`;
                 break;
             case 'Thunderstorm':
-                assets.icon = "weather-thunderstorm.svg";
+                assets.icon += "weather-thunderstorm.svg";
                 assets.rootClass = `stormy`;
                 break;
             case 'Snow':
-                assets.icon = "weather-snow.svg"
+                assets.icon += "weather-snow.svg"
                 assets.rootClass = `snowy`;
                 break;
             case 'Mist':
@@ -278,18 +298,18 @@ class App {
             case 'Ash':
             case 'Squall':
             case 'Tornado':
-                assets.icon = "weather-fog.svg";
+                assets.icon += "weather-fog.svg";
                 assets.rootClass = `foggy`;
                 break;
             case 'Clouds':
                 if (this.city.weather.current.clouds.all < 11)
-                    assets.icon = "weather-sunny.svg";
+                    assets.icon += "weather-sunny.svg";
                 else if (this.city.weather.current.clouds.all < 30) {
-                    assets.icon = "weather-partly-cloudy.svg";
+                    assets.icon += "weather-partly-cloudy.svg";
                     assets.rootClass = `p-sunny`;
                 }
                 else {
-                    assets.icon = "weather-cloudy.svg";
+                    assets.icon += "weather-cloudy.svg";
                     assets.rootClass = `cloudy`;
                 }
                 break;

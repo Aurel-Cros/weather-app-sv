@@ -65,7 +65,7 @@ export const popupTemplates = {
                     {
                         tag: "img",
                         attrs: {
-                            src: "max-temp.svg"
+                            src: "assets/icons/max-temp.svg"
                         }
                     },
                     {
@@ -78,7 +78,7 @@ export const popupTemplates = {
                     {
                         tag: "img",
                         attrs: {
-                            src: "min-temp.svg"
+                            src: "assets/icons/min-temp.svg"
                         }
                     },
                     {
@@ -96,7 +96,7 @@ export const popupTemplates = {
                     {
                         tag: "img",
                         attrs: {
-                            src: "details-wind.svg"
+                            src: "assets/icons/details-wind.svg"
                         }
                     },
                     {
@@ -164,7 +164,7 @@ export const popupTemplates = {
                     {
                         tag: "img",
                         attrs: {
-                            src: "details-humidity.svg"
+                            src: "assets/icons/details-humidity.svg"
                         }
                     },
                     {
