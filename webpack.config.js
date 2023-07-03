@@ -15,12 +15,17 @@ const stylesHandler = MiniCssExtractPlugin.loader;
 const config = {
     entry: './src/index.js',
     output: {
+        filename: 'bundle.[hash].js',
         clean: true,
         path: path.resolve(__dirname, 'dist'),
     },
     devServer: {
         open: true,
-        host: 'localhost'
+        host: 'localhost',
+        static: {
+            directory: path.join(__dirname, 'dist')
+        },
+        watchFiles: ['dist/**']
     },
     plugins: [
         new HtmlWebpackPlugin({

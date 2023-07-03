@@ -155,7 +155,6 @@ class App {
     }
     insertCurrentData() {
         this.$.currentWeatherName.textContent = this.city.weather.current.weather[0].main;
-
         this.$.cityName.textContent = this.city.name;
 
         const flagIcon = new PageBuilder({
@@ -182,7 +181,7 @@ class App {
         this.$.highTemp.textContent = Math.trunc(this.city.weather.current.main.temp_max) + '°';
         this.$.lowTemp.textContent = Math.trunc(this.city.weather.current.main.temp_min) + '°';
 
-        this.$.mainWind.textContent = Math.round(10 * this.city.weather.current.wind.speed / 3.6) / 10 + ' km/h'; // m/s to km/h
+        this.$.mainWind.textContent = Math.round(10 * this.city.weather.current.wind.speed * 3.6) / 10 + ' km/h'; // Meter per sec to kph is n * 3.6
 
         this.$.mainHumi.textContent = this.city.weather.current.main.humidity + '%';
 
@@ -240,7 +239,7 @@ class App {
             .then(response => response.json())
             .then(data => data.entities[this.city.wikiDataId].sitelinks.enwiki.url)
             .catch(() => {
-                const errorMessage = 'No wiki data ay.';
+                const errorMessage = 'No wiki data.';
                 console.log(errorMessage);
                 this.$.shortText.replaceChildren(errorMessage);
                 return false
@@ -248,12 +247,10 @@ class App {
         if (!getWikiUrl)
             return;
         const wikiId = getWikiUrl.split('/').findLast(() => true);
-        console.log(wikiId);
         const wikiApiRoot = "https://en.wikipedia.org/api/rest_v1/page/summary/";
         fetch(wikiApiRoot + wikiId)
             .then(response => response.json())
             .then(data => {
-                console.log(data.extract.length)
                 const wikiExtract = data.extract.length > 300 ? data.extract.slice(0, 300) + '...' : data.extract_html;
                 const wikiUrl = data.content_urls.mobile.page;
 
