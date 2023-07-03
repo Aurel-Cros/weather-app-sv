@@ -83,7 +83,7 @@ class App {
         const options = {
             method: 'GET',
             headers: {
-                'X-RapidAPI-Key': 'fddcdcdabamsh1a737fdd7aa5f24p169ccbjsnec9c78c409a3',
+                'X-RapidAPI-Key': process.env.RAPIDAPI_APIKEY,
                 'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
             }
         };
@@ -129,7 +129,7 @@ class App {
     }
 
     async getWeatherData() {
-        const apiKeyOWM = '5d376246ec5123d7e576ffd3bb8a5db4';
+        const apiKeyOWM = process.env.OPENWEATHERMAP_APIKEY;
         const apiUrlRoot = `https://api.openweathermap.org/data/2.5/`
         const apiKey = `?appid=${apiKeyOWM}`;
         const apiCurrent = 'weather';
@@ -250,7 +250,6 @@ class App {
         const wikiId = getWikiUrl.split('/').findLast(() => true);
         console.log(wikiId);
         const wikiApiRoot = "https://en.wikipedia.org/api/rest_v1/page/summary/";
-        // ba71cf496f90d07e4c23781d99e19128d0e61a84
         fetch(wikiApiRoot + wikiId)
             .then(response => response.json())
             .then(data => {
