@@ -18,6 +18,10 @@ const config = {
         clean: true,
         path: path.resolve(__dirname, 'dist'),
     },
+    watch: true,
+    watchOptions: {
+        aggregateTimeout: 1000
+    },
     devServer: {
         open: true,
         host: 'localhost',

@@ -28,4 +28,4 @@ import './styles/popup-overlay.scss';
 import './data/city.list.json';
 import './data/country_dial_info.json';
 
-import './components/app';
+import './components/App';
