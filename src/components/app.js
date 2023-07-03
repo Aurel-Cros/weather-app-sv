@@ -63,7 +63,6 @@ class App {
     makePopup(e, type) {
         const x = `50%`;
         const y = `${e.clientY - e.offsetY}px`;
-        console.log(e, x, y);
         const popup = new PopupOverlay(popupTemplates[type], { x: x, y: y });
         if (!popup.empty)
             this.root.append(popup);
@@ -243,7 +242,7 @@ class App {
             .catch(() => {
                 const errorMessage = 'No wiki data ay.';
                 console.log(errorMessage);
-                this.$.shortText.replaceChild(errorMessage);
+                this.$.shortText.replaceChildren(errorMessage);
                 return false
             });
         if (!getWikiUrl)
@@ -259,14 +258,14 @@ class App {
                 const wikiExtract = data.extract.length > 300 ? data.extract.slice(0, 300) + '...' : data.extract_html;
                 const wikiUrl = data.content_urls.mobile.page;
 
-                this.$.shortText.replaceChild(wikiExtract);
+                this.$.shortText.innerHTML = wikiExtract;
                 const wikiLink = new PageBuilder({ tag: "a", attrs: { href: wikiUrl, target: "_blank" }, content: "+" })
                 this.$.shortText.append(wikiLink);
             })
             .catch(() => {
                 const errorMessage = 'Wikipedia returned an error.';
                 console.log(errorMessage);
-                this.$.shortText.replaceChild(errorMessage);
+                this.$.shortText.replaceChildren(errorMessage);
                 return false
             });
 
