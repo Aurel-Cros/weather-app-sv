@@ -122,6 +122,10 @@ main {
     text-align: center;
     font-weight: 500;
 
+    >p {
+        margin: 0;
+    }
+
     span {
         font-size: 0.8rem;
     }
@@ -349,18 +353,11 @@ main {
         background-image: url('../assets/icons/dice-random.svg');
         width: 1.5rem;
         height: 1.75rem;
-        rotate: 0deg;
-        transition: rotate 500ms ease-in-out;
-
-        &:hover {
-            rotate: 360deg;
-            width: 1.65rem;
-            height: 1.925rem;
-        }
+        background-size: 100%;
+        transition: background-size 90ms;
 
         &:active {
-            width: 1.425rem;
-            height: 1.6625rem;
+            background-size: 90%;
         }
     }
 }
