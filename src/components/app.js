@@ -9,7 +9,7 @@ const root = document.querySelector("#root");
 const clockElement = new Clock('.weather-graph-values');
 
 // Select data elements
-export const $ = {
+const $ = {
     currentWeatherName: document.querySelector(".current-weather p"),
     currentWeatherIcon: document.querySelector(".current-weather img"),
     cityName: document.querySelector(".city-name p"),
