@@ -44,12 +44,12 @@ class App {
         // Display the date of today
         // Search popup when clicking on the country name
         this.$.countryInfo.addEventListener("click", (e) => {
-            makePopup(e, 'searchPopup');
+            this.makePopup(e, 'searchPopup');
         });
 
         // Filter popup when clicking on the main temperature
         this.$.mainTemp.addEventListener("click", (e) => {
-            makePopup(e, 'filterPopup');
+            this.makePopup(e, 'filterPopup');
         });
 
         this.$.randomBtn.addEventListener("click", () => {
@@ -101,9 +101,9 @@ class App {
         const onError = async (errUrl, errOptions) => {
             return new Promise((resolve, reject) => {
                 setTimeout(async () => {
-                    console.log('Fetch failed, retrying in 1 sec...');
+                    console.log('Fetch failed, retrying in 1500ms...');
                     resolve(await fetcher(errUrl, errOptions));
-                }, 1000);
+                }, 1500);
             })
         }
 
@@ -241,7 +241,9 @@ class App {
             .then(response => response.json())
             .then(data => data.entities[this.city.wikiDataId].sitelinks.enwiki.url)
             .catch(() => {
-                console.log('No wiki data.')
+                const errorMessage = 'No wiki data ay.';
+                console.log(errorMessage);
+                this.$.shortText.replaceChild(errorMessage);
                 return false
             });
         if (!getWikiUrl)
@@ -253,17 +255,20 @@ class App {
         fetch(wikiApiRoot + wikiId)
             .then(response => response.json())
             .then(data => {
-                if (data.title === 'Not found.')
-                    return
                 console.log(data.extract.length)
                 const wikiExtract = data.extract.length > 300 ? data.extract.slice(0, 300) + '...' : data.extract_html;
                 const wikiUrl = data.content_urls.mobile.page;
 
-                this.$.shortText.innerHTML = wikiExtract;
+                this.$.shortText.replaceChild(wikiExtract);
                 const wikiLink = new PageBuilder({ tag: "a", attrs: { href: wikiUrl, target: "_blank" }, content: "+" })
                 this.$.shortText.append(wikiLink);
             })
-            .catch(() => { });
+            .catch(() => {
+                const errorMessage = 'Wikipedia returned an error.';
+                console.log(errorMessage);
+                this.$.shortText.replaceChild(errorMessage);
+                return false
+            });
 
     }
     getWeatherAssets(weatherName) {
