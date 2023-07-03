@@ -23,17 +23,7 @@ const config = {
     },
     devServer: {
         open: true,
-        host: 'localhost',
-        client: {
-            logging: 'none',
-            progress: true
-        },
-        compress: true,
-        magicHtml: true,
-        static: {
-            directory: path.join(__dirname, 'dist')
-        },
-        watchFiles: ['dist/**']
+        host: 'localhost'
     },
     plugins: [
         new HtmlWebpackPlugin({
