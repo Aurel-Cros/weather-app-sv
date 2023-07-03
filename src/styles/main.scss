@@ -354,6 +354,13 @@ main {
 
         &:hover {
             rotate: 360deg;
+            width: 1.65rem;
+            height: 1.925rem;
+        }
+
+        &:active {
+            width: 1.425rem;
+            height: 1.6625rem;
         }
     }
 }
@@ -361,6 +368,9 @@ main {
 
 button {
     background: transparent;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50%;
     border: none;
     opacity: 0.8;
 
