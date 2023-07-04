@@ -86,7 +86,7 @@ export default class App {
     }
     async getOneByName(cityName) {
         const apiKeyOWM = process.env.OPENWEATHERMAP_APIKEY;
-        const url = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=10&appid=${apiKeyOWM}`;
+        const url = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=10&appid=${apiKeyOWM}`;
 
         const queryOWM = await fetchWithRetry(url);
         const result = queryOWM[0];
