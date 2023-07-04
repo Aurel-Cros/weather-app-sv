@@ -135,7 +135,7 @@ export default class App {
     }
 
     cityNotFound() {
-        const pos = { x: "50%", y: "5%" };
+        const pos = { x: "50%", y: "22%" };
         const errorPopup = new ErrorPopup(pos, 'City name not found. Try a different one.');
         this.root.append(errorPopup.element);
         console.log("City name not found.");
