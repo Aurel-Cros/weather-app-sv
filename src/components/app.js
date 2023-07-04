@@ -3,12 +3,12 @@ import WeatherWheel from './WeatherWheel.js';
 import Clock from './Clock.js';
 import { predictionCardTemplate, popupTemplates } from "./templates.js";
 import PageBuilder from "./PageBuilder.js";
-import FetchWithRetry from './FetchWithRetry.js';
+import fetchWithRetry from './FetchWithRetry.js';
 
 export default class App {
     root = document.querySelector("#root");
 
-    $ = {
+    DOM = {
         currentWeatherName: document.querySelector(".current-weather p"),
         currentWeatherIcon: document.querySelector(".current-weather img"),
         cityName: document.querySelector(".city-name p"),
@@ -36,24 +36,24 @@ export default class App {
     buildApp() {
         this.clock = new Clock('.weather-graph-values');
         this.todayDate = new Date();
-        this.$.todayDate.textContent = `${this.todayDate.toLocaleString('en-GB', { weekday: 'long' })} ${this.todayDate.getMonth() + 1}/${this.todayDate.getDate()}`;
+        this.DOM.todayDate.textContent = `${this.todayDate.toLocaleString('en-GB', { weekday: 'long' })} ${this.todayDate.getMonth() + 1}/${this.todayDate.getDate()}`;
     }
     initListeners() {
         // Weather wheel opener
-        this.$.currentWeatherIcon.addEventListener("click", () => { new WeatherWheel() });
+        this.DOM.currentWeatherIcon.addEventListener("click", () => { new WeatherWheel() });
 
         // Display the date of today
         // Search popup when clicking on the country name
-        this.$.countryInfo.addEventListener("click", (e) => {
+        this.DOM.countryInfo.addEventListener("click", (e) => {
             this.makePopup(e, 'searchPopup');
         });
 
         // Filter popup when clicking on the main temperature
-        this.$.mainTemp.addEventListener("click", (e) => {
+        this.DOM.mainTemp.addEventListener("click", (e) => {
             this.makePopup(e, 'filterPopup');
         });
 
-        this.$.randomBtn.addEventListener("click", () => {
+        this.DOM.randomBtn.addEventListener("click", () => {
             this.refreshDisplay();
         });
     }
@@ -89,7 +89,7 @@ export default class App {
             }
         };
 
-        const query = await FetchWithRetry.tryFetch(url, options);
+        const query = await fetchWithRetry(url, options);
         const returnedData = query.data[0];
 
         this.city = {
@@ -132,14 +132,13 @@ export default class App {
 
         await Promise.all([weatherPromise, forecastPromise])
             .then(data => {
-                console.log(data);
                 this.city.weather.current = data[0];
                 this.city.weather.forecast5Days = data[1];
             })
     }
     insertCurrentData() {
-        this.$.currentWeatherName.textContent = this.city.weather.current.weather[0].main;
-        this.$.cityName.textContent = this.city.name;
+        this.DOM.currentWeatherName.textContent = this.city.weather.current.weather[0].main;
+        this.DOM.cityName.textContent = this.city.name;
 
         const flagIcon = new PageBuilder({
             tag: "img",
@@ -159,20 +158,20 @@ export default class App {
             content: this.city.countryName + ", "
         });
         countryName.appendChild(regionName);
-        this.$.countryInfo.replaceChildren(flagIcon, countryName);
+        this.DOM.countryInfo.replaceChildren(flagIcon, countryName);
 
-        this.$.mainTemp.textContent = Math.trunc(this.city.weather.current.main.temp) + '°';
-        this.$.highTemp.textContent = Math.trunc(this.city.weather.current.main.temp_max) + '°';
-        this.$.lowTemp.textContent = Math.trunc(this.city.weather.current.main.temp_min) + '°';
+        this.DOM.mainTemp.textContent = Math.trunc(this.city.weather.current.main.temp) + '°';
+        this.DOM.highTemp.textContent = Math.trunc(this.city.weather.current.main.temp_max) + '°';
+        this.DOM.lowTemp.textContent = Math.trunc(this.city.weather.current.main.temp_min) + '°';
 
-        this.$.mainWind.textContent = Math.round(10 * this.city.weather.current.wind.speed * 3.6) / 10 + ' km/h'; // Meter per sec to kph is n * 3.6
+        this.DOM.mainWind.textContent = Math.round(10 * this.city.weather.current.wind.speed * 3.6) / 10 + ' km/h'; // Meter per sec to kph is n * 3.6
 
-        this.$.mainHumi.textContent = this.city.weather.current.main.humidity + '%';
+        this.DOM.mainHumi.textContent = this.city.weather.current.main.humidity + '%';
 
-        this.$.currentWeatherIcon.alt = `Current weather : ${this.city.weather.current.weather[0].main} (${this.city.weather.current.weather[0].description})`;
+        this.DOM.currentWeatherIcon.alt = `Current weather : ${this.city.weather.current.weather[0].main} (${this.city.weather.current.weather[0].description})`;
 
         const assets = this.getWeatherAssets(this.city.weather.current.weather[0].main);
-        this.$.currentWeatherIcon.src = assets.icon;
+        this.DOM.currentWeatherIcon.src = assets.icon;
 
         const backgroundNumber = Math.round(Math.random() * 5) || 1;
         this.root.className = assets.rootClass + ` bg${backgroundNumber}`;
@@ -180,7 +179,7 @@ export default class App {
     insertForecastData() {
 
         const forecastResults = [];
-        this.$.fiveDays.replaceChildren();
+        this.DOM.fiveDays.replaceChildren();
         this.city.weather.forecast5Days.list.forEach(prediction => {
             const predDate = new Date(prediction.dt * 1000); // PHP sends seconds, JS uses milliseconds
             const day = predDate.getDate();
@@ -214,7 +213,7 @@ export default class App {
             predCard.querySelector(".chanceOfRain").textContent = avgHumi + "%";
             predCard.querySelector("img").src = this.getWeatherAssets(dayWeather[0]).icon;
             predCard.querySelector("img").alt = dayWeather[0];
-            this.$.fiveDays.appendChild(predCard);
+            this.DOM.fiveDays.appendChild(predCard);
         })
     }
     async InsertWikiShortText() {
@@ -225,7 +224,7 @@ export default class App {
             .catch(() => {
                 const errorMessage = 'No wiki data.';
                 console.log(errorMessage);
-                this.$.shortText.replaceChildren(errorMessage);
+                this.DOM.shortText.replaceChildren(errorMessage);
                 return false
             });
         if (!getWikiUrl)
@@ -238,14 +237,14 @@ export default class App {
                 const wikiExtract = data.extract.length > 300 ? data.extract.slice(0, 300) + '...' : data.extract_html;
                 const wikiUrl = data.content_urls.mobile.page;
 
-                this.$.shortText.innerHTML = wikiExtract;
+                this.DOM.shortText.innerHTML = wikiExtract;
                 const wikiLink = new PageBuilder({ tag: "a", attrs: { href: wikiUrl, target: "_blank" }, content: "+" })
-                this.$.shortText.append(wikiLink);
+                this.DOM.shortText.append(wikiLink);
             })
             .catch(() => {
                 const errorMessage = 'Wikipedia returned an error.';
                 console.log(errorMessage);
-                this.$.shortText.replaceChildren(errorMessage);
+                this.DOM.shortText.replaceChildren(errorMessage);
                 return false
             });
 
