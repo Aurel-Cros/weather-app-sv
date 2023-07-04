@@ -3,6 +3,7 @@ import WeatherWheel from './WeatherWheel.js';
 import Clock from './Clock.js';
 import { predictionCardTemplate, popupTemplates } from "./templates.js";
 import PageBuilder from "./PageBuilder.js";
+import './FetchWithRetry.js';
 
 class App {
     root = document.querySelector("#root");
@@ -88,25 +89,8 @@ class App {
             }
         };
 
-        const fetcher = async (fetchUrl, fetchOptions) => {
-            return await fetch(fetchUrl, fetchOptions)
-                .then(response => response.json())
-                .then(data => data.data[0])
-                .catch(async () => {
-                    return await onError(fetchUrl, fetchOptions)
-                })
-        }
 
-        const onError = async (errUrl, errOptions) => {
-            return new Promise((resolve, reject) => {
-                setTimeout(async () => {
-                    console.log('Fetch failed, retrying in 1500ms...');
-                    resolve(await fetcher(errUrl, errOptions));
-                }, 1500);
-            })
-        }
-
-        const returnedData = await fetcher(url, options);
+        const returnedData = await FetchWithRetry.tryFetch(url, options).data[0];
 
         this.city = {
             name: returnedData.name,
@@ -317,4 +301,3 @@ class App {
         return assets;
     }
 }
-const app = new App();
