@@ -1,7 +1,8 @@
 import PageBuilder from "./PageBuilder.js";
+import { popupTemplates } from "./templates.js";
 
-export default class PopupOverlay {
-    constructor(structure, position) {
+class PopupOverlay {
+    constructor(position) {
         if (PopupOverlay.exists) {
             PopupOverlay.instance.close()
             return { empty: true }
@@ -24,7 +25,6 @@ export default class PopupOverlay {
                         class: "popup-close-btn"
                     }
                 },
-                structure,
                 {
                     tag: "div",
                     attrs: {
@@ -39,7 +39,6 @@ export default class PopupOverlay {
 
         this.closeBtn = this.element.querySelector(".popup-close-btn");
         this.closeBtn.addEventListener("click", () => this.close())
-        return this.element;
     }
     position() {
         const x = this.mouseCoordinates.x;
@@ -61,4 +60,23 @@ export default class PopupOverlay {
         }, 1000);
     }
 
+}
+
+export class SearchPopup extends PopupOverlay {
+    constructor(position) {
+        super(position)
+        const popupDOM = new PageBuilder(popupTemplates.searchPopup);
+        this.element.appendChild(popupDOM);
+        this.input = this.element.querySelector("input[type='text']");
+    }
+}
+
+export class ErrorPopup extends PopupOverlay {
+    constructor(position, message) {
+        super(position)
+        const popupDOM = new PageBuilder(popupTemplates.errorPopup);
+        const errorMessage = popupDOM.querySelector(".error-message");
+        errorMessage.textContent = message;
+        this.element.appendChild(popupDOM);
+    }
 }

@@ -70,9 +70,6 @@ main {
   opacity: 0.8;
   margin: 0;
 }
-.current-weather img:hover {
-  opacity: 1;
-}
 
 .city-name {
   color: rgba(255, 255, 255, 0.7);
@@ -195,6 +192,7 @@ main {
   font-family: Orbitron;
   font-weight: 700;
   margin: 0;
+  opacity: 0.8;
 }
 
 .icon-text {

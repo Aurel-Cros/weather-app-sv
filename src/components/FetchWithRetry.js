@@ -1,4 +1,4 @@
-export default async function fetchWithRetry(fetchUrl, fetchOptions, retryDelay = 1500) {
+export default async function fetchWithRetry(fetchUrl, fetchOptions = {}, retryDelay = 1500) {
     let counter = 0;
 
     const tryFetch = async (fetchUrl, fetchOptions, retryDelay) => {
@@ -20,8 +20,10 @@ export default async function fetchWithRetry(fetchUrl, fetchOptions, retryDelay 
     const onError = async (errUrl, errOptions, retryDelay) => {
         counter++;
         return new Promise((resolve, reject) => {
-            if (counter >= 5)
+            if (counter >= 5) {
                 reject("Too many tries.");
+                return
+            }
 
             setTimeout(async () => {
                 console.log(`Retrying in ${retryDelay}ms...`);

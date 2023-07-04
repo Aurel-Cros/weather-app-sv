@@ -1,7 +1,6 @@
-import PopupOverlay from "./PopupOverlay.js";
-import WeatherWheel from './WeatherWheel.js';
+import { SearchPopup, ErrorPopup } from "./PopupOverlay.js";
 import Clock from './Clock.js';
-import { predictionCardTemplate, popupTemplates } from "./templates.js";
+import { predictionCardTemplate } from "./templates.js";
 import PageBuilder from "./PageBuilder.js";
 import fetchWithRetry from './FetchWithRetry.js';
 
@@ -28,7 +27,7 @@ export default class App {
     constructor() {
         this.buildApp();
         this.initListeners();
-        this.refreshDisplay();
+        this.getRandomCity();
     }
     /*
     BUILDING AND INITIALIZER METHODS
@@ -39,45 +38,109 @@ export default class App {
         this.DOM.todayDate.textContent = `${this.todayDate.toLocaleString('en-GB', { weekday: 'long' })} ${this.todayDate.getMonth() + 1}/${this.todayDate.getDate()}`;
     }
     initListeners() {
-        // Weather wheel opener
-        this.DOM.currentWeatherIcon.addEventListener("click", () => { new WeatherWheel() });
-
         // Display the date of today
         // Search popup when clicking on the country name
         this.DOM.countryInfo.addEventListener("click", (e) => {
-            this.makePopup(e, 'searchPopup');
-        });
-
-        // Filter popup when clicking on the main temperature
-        this.DOM.mainTemp.addEventListener("click", (e) => {
-            this.makePopup(e, 'filterPopup');
+            this.searchPopup(e);
         });
 
         this.DOM.randomBtn.addEventListener("click", () => {
-            this.refreshDisplay();
+            this.getRandomCity();
         });
     }
 
     /*
     WIDGETS
     */
-    makePopup(e, type) {
+    searchPopup(e) {
         const x = `50%`;
         const y = `${e.clientY - e.offsetY}px`;
-        const popup = new PopupOverlay(popupTemplates[type], { x: x, y: y });
-        if (!popup.empty)
-            this.root.append(popup);
+        const pos = { x: x, y: y };
+
+        const popup = new SearchPopup(pos);
+        if (popup.empty)
+            return;
+
+        this.root.append(popup.element);
+        popup.input.addEventListener("change", (e) => {
+            console.log(e)
+            this.getSearchCity(e.target.value);
+            popup.close();
+        })
     }
-    /*
-    Main controlling methods
-    */
-    async refreshDisplay() {
+
+    async getSearchCity(cityName) {
+        await this.getOneByName(cityName);
+        await this.displayCity();
+    }
+    async getRandomCity() {
         await this.getOneRandom();
+        await this.displayCity();
+    }
+
+    async displayCity() {
         await this.getWeatherData();
         this.insertCurrentData();
         this.insertForecastData();
         await this.InsertWikiShortText();
     }
+    async getOneByName(cityName) {
+        const apiKeyOWM = process.env.OPENWEATHERMAP_APIKEY;
+        const url = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=10&appid=${apiKeyOWM}`;
+
+        const queryOWM = await fetchWithRetry(url);
+        const result = queryOWM[0];
+
+        if (!result) {
+            this.cityNotFound();
+            return
+        }
+
+        const rapidParameters = `location=${result.lat}${(result.lon >= 0 ? '%2B' : '') + result.lon}&namePrefix=${cityName}&sort=-population`;
+
+        const url2 = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?limit=10&hateoasMode=false&${rapidParameters}`;
+        console.log(url2)
+        const options = {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': process.env.RAPIDAPI_APIKEY,
+                'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+            }
+        };
+
+        const queryRapid = await fetchWithRetry(url2, options);
+        const finalData = queryRapid.data.find(element => element.type === 'CITY');
+
+        if (!finalData) {
+            this.cityNotFound();
+            return
+        }
+
+        this.city = {
+            name: finalData.name,
+            countryName: finalData.country,
+            countryCode: finalData.countryCode,
+            regionName: finalData.region,
+            wikiDataId: finalData.wikiDataId,
+            coord: {
+                lat: finalData.latitude,
+                lon: finalData.longitude
+            },
+            weather: {
+
+                current: {},
+                forecast5Days: {}
+            }
+        }
+    }
+
+    cityNotFound() {
+        const pos = { x: "50%", y: "5%" };
+        const errorPopup = new ErrorPopup(pos, 'City name not found. Try a different one.');
+        this.root.append(errorPopup.element);
+        console.log("City name not found.");
+    }
+
     async getOneRandom() {
         const randomNumber = Math.round(Math.random() * 27632);
         const url = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?offset=${randomNumber}&limit=1&hateoasMode=false`;
@@ -108,8 +171,6 @@ export default class App {
                 forecast5Days: {}
             }
         }
-
-        console.log(this.city);
     }
 
     async getWeatherData() {
@@ -136,6 +197,7 @@ export default class App {
                 this.city.weather.forecast5Days = data[1];
             })
     }
+
     insertCurrentData() {
         this.DOM.currentWeatherName.textContent = this.city.weather.current.weather[0].main;
         this.DOM.cityName.textContent = this.city.name;
@@ -216,6 +278,7 @@ export default class App {
             this.DOM.fiveDays.appendChild(predCard);
         })
     }
+
     async InsertWikiShortText() {
         // Get short text from Wikipedia
         const getWikiUrl = await fetch(`https://www.wikidata.org/w/api.php?origin=*&action=wbgetentities&props=sitelinks/urls&ids=${this.city.wikiDataId}&format=json&sitefilter=enwiki`)
@@ -225,6 +288,7 @@ export default class App {
                 const errorMessage = 'No wiki data.';
                 console.log(errorMessage);
                 this.DOM.shortText.replaceChildren(errorMessage);
+                this.DOM.shortText.style.textAlign = "center";
                 return false
             });
         if (!getWikiUrl)
