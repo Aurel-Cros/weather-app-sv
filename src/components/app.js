@@ -3,9 +3,9 @@ import WeatherWheel from './WeatherWheel.js';
 import Clock from './Clock.js';
 import { predictionCardTemplate, popupTemplates } from "./templates.js";
 import PageBuilder from "./PageBuilder.js";
-import './FetchWithRetry.js';
+import FetchWithRetry from './FetchWithRetry.js';
 
-class App {
+export default class App {
     root = document.querySelector("#root");
 
     $ = {
@@ -89,8 +89,8 @@ class App {
             }
         };
 
-
-        const returnedData = await FetchWithRetry.tryFetch(url, options).data[0];
+        const query = await FetchWithRetry.tryFetch(url, options);
+        const returnedData = query.data[0];
 
         this.city = {
             name: returnedData.name,

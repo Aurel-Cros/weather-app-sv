@@ -24,6 +24,6 @@ import './styles/clock.scss';
 import './styles/popup-overlay.scss';
 import './styles/weather-wheel.scss';
 
-import './components/App.js';
+import App from './components/App.js';
 
 const app = new App();
