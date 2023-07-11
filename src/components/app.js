@@ -141,7 +141,8 @@ export default class App {
     }
 
     async getOneRandom() {
-        const randomNumber = Math.round(Math.random() * 27632);
+        const randomNumber = Math.round(Math.random() * 615134);
+        console.log(randomNumber);
         const url = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?offset=${randomNumber}&limit=1&hateoasMode=false`;
         const options = {
             method: 'GET',
@@ -222,8 +223,6 @@ export default class App {
         this.DOM.countryInfo.replaceChildren(flagIcon, countryName);
 
         this.DOM.mainTemp.textContent = Math.trunc(this.city.weather.current.main.temp) + '°';
-        this.DOM.highTemp.textContent = Math.trunc(this.city.weather.current.main.temp_max) + '°';
-        this.DOM.lowTemp.textContent = Math.trunc(this.city.weather.current.main.temp_min) + '°';
 
         this.DOM.mainWind.textContent = Math.round(10 * this.city.weather.current.wind.speed * 3.6) / 10 + ' km/h'; // Meter per sec to kph is n * 3.6
 
@@ -259,11 +258,17 @@ export default class App {
             dayForecast.weather[prediction.weather[0].main] = (dayForecast.weather[prediction.weather[0].main] ?? 0) + 1;
         })
         forecastResults.forEach(day => {
-            if (day.day === new Date().getDate())
+            if (day.day === new Date().getDate()) {
+                const sortedTemps = day.temps.sort((a, b) => a - b);
+                const minTemp = Math.trunc(sortedTemps[0]);
+                const maxTemp = Math.trunc(sortedTemps[sortedTemps.length - 1]);
+                this.DOM.highTemp.textContent = Math.trunc(maxTemp) + '°';
+                this.DOM.lowTemp.textContent = Math.trunc(minTemp) + '°';
                 return;
+            }
             const sortedTemps = day.temps.sort((a, b) => a - b);
             const minTemp = Math.trunc(sortedTemps[0]);
-            const maxTemp = Math.trunc(sortedTemps.findLast(a => 1));
+            const maxTemp = Math.trunc(sortedTemps[sortedTemps.length - 1]);
             const avgHumi = Math.trunc(day.chanceOfRain.reduce((accu, humi) => accu + humi * 100, 0) / day.chanceOfRain.length);
             const predCard = new PageBuilder(predictionCardTemplate);
 
