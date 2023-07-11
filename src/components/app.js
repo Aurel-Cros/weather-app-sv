@@ -63,14 +63,12 @@ export default class App {
 
         this.root.append(popup.element);
         popup.input.addEventListener("change", (e) => {
-            console.log(popup.isCountryLocked)
             this.getSearchCity(e.target.value, popup.isCountryLocked);
             popup.close();
         })
     }
 
     async getSearchCity(cityName, isCountryLocked) {
-        console.log(isCountryLocked);
         await this.getOneByName(cityName, isCountryLocked);
         await this.displayCity();
     }
@@ -88,7 +86,6 @@ export default class App {
     async getOneByName(cityName, isCountryLocked) {
         const apiKeyOWM = process.env.OPENWEATHERMAP_APIKEY;
         const countryCode = isCountryLocked ? `,${this.city.countryCode}` : '';
-        console.log(countryCode, isCountryLocked);
         const url = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}${countryCode}&limit=10&appid=${apiKeyOWM}`;
 
         const queryOWM = await fetchWithRetry(url);
