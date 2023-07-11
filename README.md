@@ -1,15 +1,9 @@
-# 🚀 Welcome to your new awesome project!
+# 🚀 Random Weather App
 
-This project has been created using **webpack-cli**, you can now run
+A peculiar weather app that gives you the weather of a random city in the world. Simply click the dice to get a new random one !
 
-```
-npm run build
-```
+<sub>Maybe there's a search function hidden somewhere, too. ;)</sub>
 
-or
+## Credits
 
-```
-yarn build
-```
-
-to bundle your application
+Design by [Salomé Vauchier](https://github.com/SalomeVv)
