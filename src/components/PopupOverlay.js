@@ -65,9 +65,14 @@ class PopupOverlay {
 export class SearchPopup extends PopupOverlay {
     constructor(position) {
         super(position)
+        this.isCountryLocked = false;
         const popupDOM = new PageBuilder(popupTemplates.searchPopup);
         this.element.appendChild(popupDOM);
         this.input = this.element.querySelector("input[type='text']");
+        this.countryLock = this.element.querySelector("label");
+        this.countryLock.addEventListener("click", () => {
+            this.isCountryLocked = !this.isCountryLocked;
+        })
     }
 }
 

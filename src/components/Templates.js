@@ -37,26 +37,6 @@ export const popupTemplates = {
                 ]
             },
             {
-                tag: "div",
-                children: [
-                    {
-                        tag: "input",
-                        attrs: {
-                            id: "county-check",
-                            type: "checkbox"
-                        }
-                    },
-                    {
-                        tag: "label",
-                        content: "Country",
-                        attrs: {
-                            class: "country-lock",
-                            for: "county-check"
-                        }
-                    }
-                ]
-            },
-            {
                 tag: "input",
                 attrs: {
                     type: "text",

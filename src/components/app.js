@@ -63,14 +63,15 @@ export default class App {
 
         this.root.append(popup.element);
         popup.input.addEventListener("change", (e) => {
-            console.log(e)
-            this.getSearchCity(e.target.value);
+            console.log(popup.isCountryLocked)
+            this.getSearchCity(e.target.value, popup.isCountryLocked);
             popup.close();
         })
     }
 
-    async getSearchCity(cityName) {
-        await this.getOneByName(cityName);
+    async getSearchCity(cityName, isCountryLocked) {
+        console.log(isCountryLocked);
+        await this.getOneByName(cityName, isCountryLocked);
         await this.displayCity();
     }
     async getRandomCity() {
@@ -84,9 +85,11 @@ export default class App {
         this.insertForecastData();
         await this.InsertWikiShortText();
     }
-    async getOneByName(cityName) {
+    async getOneByName(cityName, isCountryLocked) {
         const apiKeyOWM = process.env.OPENWEATHERMAP_APIKEY;
-        const url = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=10&appid=${apiKeyOWM}`;
+        const countryCode = isCountryLocked ? `,${this.city.countryCode}` : '';
+        console.log(countryCode, isCountryLocked);
+        const url = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}${countryCode}&limit=10&appid=${apiKeyOWM}`;
 
         const queryOWM = await fetchWithRetry(url);
         const result = queryOWM[0];
@@ -99,7 +102,6 @@ export default class App {
         const rapidParameters = `location=${result.lat}${(result.lon >= 0 ? '%2B' : '') + result.lon}&namePrefix=${cityName}&sort=-population`;
 
         const url2 = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?limit=10&hateoasMode=false&${rapidParameters}`;
-        console.log(url2)
         const options = {
             method: 'GET',
             headers: {
