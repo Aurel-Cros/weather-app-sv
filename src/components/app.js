@@ -278,7 +278,12 @@ export default class App {
             const avgHumi = Math.trunc(day.chanceOfRain.reduce((accu, humi) => accu + humi * 100, 0) / day.chanceOfRain.length);
             const predCard = new PageBuilder(predictionCardTemplate);
 
-            const dayWeather = Object.entries(day.weather).reduce((max, entry) => entry[1] >= max[1] ? entry : max, [0, -Infinity])
+            /*
+            day.weather holds key-value pairs in a object. Making in into an array allows us to go through it easily.
+            The reduce method compares a stored "max" value from the entries - if an entry is higher than max, its value is then stored in max.
+            Final return is an array with a single 0 index holding the max value.
+            */
+            const dayWeather = Object.entries(day.weather).reduce((max, entry) => entry[1] >= max[1] ? entry : max, [0, -Infinity]);
 
             predCard.querySelector(".day").textContent = `${day.dayName}`;
             predCard.querySelector(".min-max-temps").textContent = minTemp + "° / " + maxTemp + "°";
