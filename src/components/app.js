@@ -67,7 +67,16 @@ export default class App {
             popup.close();
         })
     }
+    cityNotFound() {
+        const pos = { x: "50%", y: "22%" };
+        const errorPopup = new ErrorPopup(pos, 'City name not found. Try a different one.');
+        this.root.append(errorPopup.element);
+        console.log("City name not found.");
+    }
 
+    /*
+    App flow
+    */
     async getSearchCity(cityName, isCountryLocked) {
         await this.getOneByName(cityName, isCountryLocked);
         await this.displayCity();
@@ -76,13 +85,16 @@ export default class App {
         await this.getOneRandom();
         await this.displayCity();
     }
-
     async displayCity() {
         await this.getWeatherData();
         this.insertCurrentData();
         this.insertForecastData();
         await this.InsertWikiShortText();
     }
+
+    /*
+    API calls and data management
+    */
     async getOneByName(cityName, isCountryLocked) {
         const apiKeyOWM = process.env.OPENWEATHERMAP_APIKEY;
         const countryCode = isCountryLocked ? `,${this.city.countryCode}` : '';
@@ -132,14 +144,6 @@ export default class App {
             }
         }
     }
-
-    cityNotFound() {
-        const pos = { x: "50%", y: "22%" };
-        const errorPopup = new ErrorPopup(pos, 'City name not found. Try a different one.');
-        this.root.append(errorPopup.element);
-        console.log("City name not found.");
-    }
-
     async getOneRandom() {
         const randomNumber = Math.round(Math.random() * 615134);
         console.log(randomNumber);
@@ -172,7 +176,6 @@ export default class App {
             }
         }
     }
-
     async getWeatherData() {
         const apiKeyOWM = process.env.OPENWEATHERMAP_APIKEY;
         const apiUrlRoot = `https://api.openweathermap.org/data/2.5/`
@@ -198,6 +201,9 @@ export default class App {
             })
     }
 
+    /*
+    Data inserts
+    */
     insertCurrentData() {
         this.DOM.currentWeatherName.textContent = this.city.weather.current.weather[0].main;
         this.DOM.cityName.textContent = this.city.name;
@@ -282,7 +288,6 @@ export default class App {
             this.DOM.fiveDays.appendChild(predCard);
         })
     }
-
     async InsertWikiShortText() {
         // Get short text from Wikipedia
         const getWikiUrl = await fetch(`https://www.wikidata.org/w/api.php?origin=*&action=wbgetentities&props=sitelinks/urls&ids=${this.city.wikiDataId}&format=json&sitefilter=enwiki`)
@@ -317,6 +322,8 @@ export default class App {
             });
 
     }
+
+    // Ressource getter
     getWeatherAssets(weatherName) {
         const assets = {
             icon: 'assets/icons/',
